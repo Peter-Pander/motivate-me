@@ -9,6 +9,7 @@
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "npm --prefix frontend run dev",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "npm run build:frontend",
     "build:frontend": "npm --prefix frontend run build",
     "start": "npm --prefix backend start"
   },
