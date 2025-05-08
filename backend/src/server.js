@@ -16,20 +16,20 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// In production, serve the frontend build as static files
+// Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   const staticPath = path.join(__dirname, '../frontend/dist');
   app.use(express.static(staticPath));
 }
 
-// Define API routes _before_ the SPA fallback
+// Define API routes before the SPA fallback
 app.get('/api', (req, res) => {
   res.send('🟢 Plauze Patrol API: Hello World');
 });
 
-// SPA fallback: match any path (except the ones above) and serve index.html
+// SPA fallback for React Router (Express 5+ compatible)
 if (process.env.NODE_ENV === 'production') {
-  app.get('/*', (req, res) => {
+  app.get('/:path*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
   });
 }
