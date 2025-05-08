@@ -22,14 +22,14 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(staticPath));
 }
 
-// Define API routes before the SPA fallback
+// Define API routes first
 app.get('/api', (req, res) => {
   res.send('🟢 Plauze Patrol API: Hello World');
 });
 
-// SPA fallback for React Router (Express 5+ compatible)
+// SPA fallback: use a RegExp to avoid path-to-regexp parsing issues
 if (process.env.NODE_ENV === 'production') {
-  app.get('/:path*', (req, res) => {
+  app.get(/^\/.*$/, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
   });
 }
