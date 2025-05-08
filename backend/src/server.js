@@ -18,21 +18,20 @@ app.use(express.json());
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
-  const staticPath = path.join(__dirname, '../frontend/dist');
+  // __dirname is backend/src, so go up two levels to project root
+  const staticPath = path.join(__dirname, '..', '..', 'frontend', 'dist');
   app.use(express.static(staticPath));
+
+  // SPA fallback for React Router
+  app.get(/^\/.*$/, (req, res) => {
+    res.sendFile(path.join(staticPath, 'index.html'));
+  });
 }
 
-// Define API routes first
+// Define API route
 app.get('/api', (req, res) => {
   res.send('🟢 Plauze Patrol API: Hello World');
 });
-
-// SPA fallback: use a RegExp to avoid path-to-regexp parsing issues
-if (process.env.NODE_ENV === 'production') {
-  app.get(/^\/.*$/, (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  });
-}
 
 // start server
 const PORT = process.env.PORT || 5000;
